@@ -1,9 +1,8 @@
 from random import shuffle
-
 from Card import Card
 
 COLORS = ["red", "blue", "green", "yellow"]
-VALUES = range(1, 15)
+VALUES = range(0, 15)
 
 
 class Stack:
@@ -22,3 +21,6 @@ class Stack:
 
     def draw_card(self):
         return self.cards.pop()
+
+    def __len__(self):
+        return len(self.cards)

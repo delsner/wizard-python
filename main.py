@@ -1,6 +1,5 @@
-from Game import Game
 import click
-
+from Game import Game
 from Player import Player
 
 
@@ -10,7 +9,7 @@ def start_game():
 
     for i in range(players):
         p = Player()
-        p.name = click.prompt("Name of player %d" % (i+1), type=str)
+        p.name = click.prompt("Name of player %d" % (i + 1), type=str)
         game.add_player(p)
 
     game.start()

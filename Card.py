@@ -1,11 +1,11 @@
-WIZARD = 15
+WIZARD = 14
 JOKER = 0
 
 
 class Card:
     def __init__(self):
-        self.color = None
-        self.card_value = None
+        self.color = ''
+        self.value = 0
 
     def __str__(self):
-        return "%d%s" % (self.card_value, self.color[0])
+        return "%d %s" % (self.value, self.color[0])
