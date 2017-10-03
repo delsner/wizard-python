@@ -11,14 +11,14 @@ class Player:
         self.won_tricks = 0
         self.score = 0
 
-    def deal_card(self, card):
+    def receive_card(self, card):
         self.cards.add(card)
 
     def play_card(self, card):
         self.cards.remove(card)
         return card
 
-    def request_card(self):
+    def select_card(self):
         self.print_cards()
         all_cards = self.sort_cards_by_type()
         selected_index = -1
@@ -26,7 +26,7 @@ class Player:
             selected_index = click.prompt("%s, choose card index" % self.name, type=int)
         return all_cards[selected_index]
 
-    def request_tricks(self):
+    def guess_tricks(self):
         self.print_cards()
         return click.prompt('%s, how many tricks will you make?' % self.name, type=int)
 

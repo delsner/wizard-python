@@ -13,7 +13,7 @@ class Round:
     def deal_cards(self):
         for _ in range(self.round_number):
             for player in self.players:
-                player.deal_card(self.stack.draw_card())
+                player.receive_card(self.stack.draw_card())
         self.determine_trump()
         click.echo(click.style(
             'Cards have been shuffled. New round with %d cards. Trump is: %s' % (self.round_number, self.trump_color),
@@ -26,9 +26,9 @@ class Round:
 
     def request_tricks(self):
         for p in self.players:
-            requested_tricks = p.request_tricks()
+            requested_tricks = p.guess_tricks()
             while not requested_tricks <= self.round_number and requested_tricks >= 0:
-                requested_tricks = p.request_tricks()
+                requested_tricks = p.guess_tricks()
             p.guessed_tricks = requested_tricks
 
     def play_trick(self):
@@ -37,9 +37,9 @@ class Round:
         t.trump_color = self.trump_color
         for p in self.players:
             click.echo(click.style('--------------------------------', fg='black', bold='black'))
-            requested_card = p.request_card()
+            requested_card = p.select_card()
             while not t.validate_requested_card(requested_card, p.cards):
-                requested_card = p.request_card()
+                requested_card = p.select_card()
             t.receive_card(p.play_card(requested_card))
         winner_ix = t.determine_winner()
         self.players[winner_ix].won_tricks += 1
