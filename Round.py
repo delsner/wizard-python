@@ -1,6 +1,7 @@
 import click
+
 from Stack import Stack
-from Trick import Trick
+import Trick
 
 
 class Round:
@@ -24,39 +25,25 @@ class Round:
         if len(self.stack) > 0:
             self.trump_color = self.stack.draw_card().color
 
-    def request_tricks(self):
+    def request_trick_guesses(self):
         for p in self.players:
             requested_tricks = p.guess_tricks()
             while not requested_tricks <= self.round_number and requested_tricks >= 0:
                 requested_tricks = p.guess_tricks()
             p.guessed_tricks = requested_tricks
 
-    def play_trick(self):
-        click.echo(click.style('--------------------------------', fg='black', bold='black'))
-        t = Trick()
-        t.trump_color = self.trump_color
-        for p in self.players:
-            click.echo(click.style('--------------------------------', fg='black', bold='black'))
-            requested_card = p.select_card()
-            while not t.validate_requested_card(requested_card, p.cards):
-                requested_card = p.select_card()
-            t.receive_card(p.play_card(requested_card))
-        winner_ix = t.determine_winner()
-        self.players[winner_ix].won_tricks += 1
-        click.echo(click.style('%s won the trick.' % self.players[winner_ix], fg='black', bold='black'))
-        return winner_ix
-
     def play_round(self):
         click.echo(click.style('--------------------------------', fg='black', bold='black'))
         self.deal_cards()
-        self.reset_tricks()
-        self.request_tricks()
+        self.reset_trick_guesses()
+        self.request_trick_guesses()
         for _ in range(self.round_number):
-            winning_player_ix = self.play_trick()
+            t = Trick.Trick(trump_color=self.trump_color)
+            winning_player_ix = t.play_trick(self.players)
             self.players = self.players[winning_player_ix:] + self.players[:winning_player_ix]
-        self.evaluate_score()
+        self.update_scores()
 
-    def evaluate_score(self):
+    def update_scores(self):
         click.echo(click.style('------------CURRENT SCORE-----------------', fg='black', bold='black'))
         for p in self.players:
             p.score += p.won_tricks
@@ -64,6 +51,6 @@ class Round:
                 p.score += 5
             click.echo(click.style('%s: %d points.' % (p, p.score), fg='black', bold='black'))
 
-    def reset_tricks(self):
+    def reset_trick_guesses(self):
         for p in self.players:
             p.reset_tricks()

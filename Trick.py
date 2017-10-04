@@ -1,10 +1,12 @@
+import click
+
 from Card import WIZARD, JOKER
 
 
 class Trick:
-    def __init__(self):
+    def __init__(self, trump_color=""):
+        self.trump_color = trump_color
         self.cards = []
-        self.trump_color = ""
         self.base_card = None
 
     def receive_card(self, card):
@@ -46,3 +48,16 @@ class Trick:
         if len(list(filtered_hand_cards)) > 0 and card.color != self.base_card.color:
             return False
         return True
+
+    def play_trick(self, players):
+        click.echo(click.style('--------------------------------', fg='black', bold='black'))
+        for p in players:
+            click.echo(click.style('--------------------------------', fg='black', bold='black'))
+            requested_card = p.select_card()
+            while not self.validate_requested_card(requested_card, p.cards):
+                requested_card = p.select_card()
+            self.receive_card(p.play_card(requested_card))
+        winner_ix = self.determine_winner()
+        players[winner_ix].won_tricks += 1
+        click.echo(click.style('%s won the trick.' % players[winner_ix], fg='black', bold='black'))
+        return winner_ix
