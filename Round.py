@@ -1,29 +1,15 @@
 import click
 
-from Stack import Stack
+from CardDeck import CardDeck
 import Trick
 
 
 class Round:
     def __init__(self):
-        self.stack = Stack()
+        self.stack = CardDeck()
         self.round_number = 0
         self.players = []
         self.trump_color = ''
-
-    def deal_cards(self):
-        for _ in range(self.round_number):
-            for player in self.players:
-                player.receive_card(self.stack.draw_card())
-        self.determine_trump()
-        click.echo(click.style(
-            'Cards have been shuffled. New round with %d cards. Trump is: %s' % (self.round_number, self.trump_color),
-            fg='black', bold='black'))
-        click.echo(click.style('--------------------------------', fg='black', bold='black'))
-
-    def determine_trump(self):
-        if len(self.stack) > 0:
-            self.trump_color = self.stack.draw_card().color
 
     def request_trick_guesses(self):
         for p in self.players:

@@ -5,7 +5,7 @@ COLORS = ["red", "blue", "green", "yellow"]
 VALUES = range(0, 15)
 
 
-class Stack:
+class CardDeck:
     def __init__(self):
         self.cards = []
         self.initialise_cards()
